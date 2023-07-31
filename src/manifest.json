@@ -1,0 +1,13 @@
+{
+  "name": "Sample",
+  "version": "1.0.0",
+  "manifest_version": 3,
+  "description": "chrome extension for sharing on misskey",
+  "content_scripts": [{
+    "matches": ["https://www.youtube.com/*"],
+    "js": [
+      "content.js"
+    ],
+    "css": ["on_youtube.css"]
+    }]
+}
