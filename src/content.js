@@ -6,11 +6,6 @@ const observerOptions = {
     subtree: true
 };
 
-// const extractHashTag = (str) => {
-//     const regexp = /\#[ぁ-んァ-ヶｱ-ﾝﾞﾟ一-龠0-9a-zA-Z]*/g;
-//     const hashTags = [...str.matchAll(regexp)];
-//     return hashTags;
-// }
 const generateNoteWord = () => {
     try {
         // HACK: 本当はmeta titleから取ってきたいがyoutubeのバグでひとつ前に見てた動画のmeta tagから更新されてないことがある
