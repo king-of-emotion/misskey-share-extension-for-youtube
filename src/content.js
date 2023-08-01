@@ -23,6 +23,22 @@ const generateNoteWord = () => {
         console.log(error);
     }
 }
+// HACK: これ以外のパターンできたら対応しない
+const generateUrl = (str) => {
+    if (!str || str.length === 0 ) {
+        return undefined;
+    }
+    if(str.startsWith("http")) {
+        if(str.endsWith("/")) {
+            return str.slice(0, -1);
+        }
+        return str;
+    }
+    if(str.endsWith("/")) {
+        return "https://" + str.slice(0, -1);
+    }
+    return "https://" + str; 
+}
 const addMisskeyShareButton = (observer) => {
     // 要素を加えることでmutationObserverが無限ループするので追加の処理中はdisconnectする
     observer.disconnect()
@@ -47,7 +63,10 @@ const addMisskeyShareButton = (observer) => {
         misskeyShareButton.appendChild(misskeyShareButtonTitle);
         const words = generateNoteWord();
         misskeyShareButton.onclick = () => {
-            window.open("https://misskey.io/share" + `?text=${words.title}&url=${words.url}`, "_blank");
+            chrome.storage.sync.get(["share_target_misskey_url"], result => {
+                const misskeyUrl = result.share_target_misskey_url && result.share_target_misskey_url.length > 0 ? result.share_target_misskey_url : "https://misskey.io"
+                window.open(generateUrl(misskeyUrl) + "/share" + `?text=${words.title}&url=${words.url}`, "_blank");
+            });
         }
         const baseChild = document.getElementsByTagName("yt-share-target-renderer")[1];
         baseChild.parentNode.insertBefore(misskeyShareButton, baseChild);

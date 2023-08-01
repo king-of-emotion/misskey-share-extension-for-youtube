@@ -3,6 +3,14 @@
   "version": "1.0.0",
   "manifest_version": 3,
   "description": "chrome extension for sharing on misskey",
+  "action": {
+    "matches": ["https://www.youtube.com/*"],
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "tabs",
+    "storage"
+  ],
   "content_scripts": [{
     "matches": ["https://www.youtube.com/*"],
     "js": [
