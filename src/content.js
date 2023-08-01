@@ -9,8 +9,7 @@ const observerOptions = {
 const generateNoteWord = () => {
     try {
         // HACK: 本当はmeta titleから取ってきたいがyoutubeのバグでひとつ前に見てた動画のmeta tagから更新されてないことがある
-        // #があるとmisskey側がうまく調整できないので一旦#を消してしまう
-        const title = document.title.replace(/\(.*\)/, "").split(" - ")[0].replaceAll("\#", "");
+        const title = document.title.replace(/\(.*\)\s/, "").split(" - ")[0];
         const searchParams = new URLSearchParams(window.location.search);
         const videoHash = searchParams.get("v");
         // HACK: 実際のyoutubeのシェア機能だとyoutube liveの時はyoutube.com/liveを使ってそうだが区別するのも面倒だし全部短縮URL/videoHashでリンクしてそう
@@ -29,15 +28,9 @@ const generateUrl = (str) => {
         return undefined;
     }
     if(str.startsWith("http")) {
-        if(str.endsWith("/")) {
-            return str.slice(0, -1);
-        }
-        return str;
+        return str.replace(/\/$/, "");
     }
-    if(str.endsWith("/")) {
-        return "https://" + str.slice(0, -1);
-    }
-    return "https://" + str; 
+    return "https://" + str.replace(/\/$/, "");
 }
 const addMisskeyShareButton = (observer) => {
     // 要素を加えることでmutationObserverが無限ループするので追加の処理中はdisconnectする
@@ -65,7 +58,7 @@ const addMisskeyShareButton = (observer) => {
         misskeyShareButton.onclick = () => {
             chrome.storage.sync.get(["share_target_misskey_url"], result => {
                 const misskeyUrl = result.share_target_misskey_url && result.share_target_misskey_url.length > 0 ? result.share_target_misskey_url : "https://misskey.io"
-                window.open(generateUrl(misskeyUrl) + "/share" + `?text=${words.title}&url=${words.url}`, "_blank");
+                window.open(generateUrl(misskeyUrl) + "/share" + `?text=${encodeURIComponent(words.title)}&url=${words.url}`, "_blank");
             });
         }
         const baseChild = document.getElementsByTagName("yt-share-target-renderer")[1];

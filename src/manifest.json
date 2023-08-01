@@ -1,8 +1,8 @@
 {
-  "name": "misskey-share-on-youtube",
+  "name": "misskey-share-for-youtube",
   "version": "1.0.0",
   "manifest_version": 3,
-  "description": "chrome extension for sharing on misskey",
+  "description": "you can share youtube contents on misskey",
   "action": {
     "matches": ["https://www.youtube.com/*"],
     "default_popup": "popup.html"
@@ -17,5 +17,10 @@
       "content.js"
     ],
     "css": ["on_youtube.css"]
-    }]
+    }],
+    "icons": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
 }
