@@ -1,8 +1,8 @@
 {
-  "name": "misskey-share-for-youtube",
+  "name": "misskey-share-button-for-youtube",
   "version": "1.0.0",
   "manifest_version": 3,
-  "description": "you can share youtube contents on misskey",
+  "description": "youtubeのシェアメニューにmisskeyへの共有ボタンを追加します",
   "action": {
     "matches": ["https://www.youtube.com/*"],
     "default_popup": "popup.html"
