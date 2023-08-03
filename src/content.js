@@ -6,14 +6,20 @@ const observerOptions = {
     subtree: true
 };
 
-const generateNoteWord = () => {
+const generateNoteWord = async () => {
     try {
-        // HACK: 本当はmeta titleから取ってきたいがyoutubeのバグでひとつ前に見てた動画のmeta tagから更新されてないことがある
-        const title = document.title.replace(/\(.*\)\s/, "").split(" - ")[0];
-        const searchParams = new URLSearchParams(window.location.search);
-        const videoHash = searchParams.get("v");
-        // HACK: 実際のyoutubeのシェア機能だとyoutube liveの時はyoutube.com/liveを使ってそうだが区別するのも面倒だし全部短縮URL/videoHashでリンクしてそう
-        const url = `https://youtu.be/${videoHash}`;
+        const url = document.getElementById("share-url").value;
+        const targetUrl = (new URL(url)).host === "youtu.be" ? `https://www.youtube.com/watch?v=${url.split("/")[3]}` : url;
+        const response = await fetch(targetUrl, {
+            method: 'GET',
+            mode: 'same-origin',
+            headers: {
+            'Content-Type': 'text/html',
+            }});
+        const string = await new Response(response.body).text();
+        const domParser = new DOMParser();
+        const targetDocument = domParser.parseFromString(string, "text/html");
+        const title = targetDocument.querySelector("meta[name=title]").content;
         return {
             title,
             url,
@@ -32,7 +38,7 @@ const generateUrl = (str) => {
     }
     return "https://" + str.replace(/\/$/, "");
 }
-const addMisskeyShareButton = (observer) => {
+const addMisskeyShareButton = async (observer) => {
     // 要素を加えることでmutationObserverが無限ループするので追加の処理中はdisconnectする
     observer.disconnect()
     const shareButtonList = document.querySelector("div #list .yt-third-party-share-target-section-renderer");
@@ -54,7 +60,7 @@ const addMisskeyShareButton = (observer) => {
         misskeyShareButtonTitle.textContent = "misskey";
         misskeyShareButton.appendChild(misskeyIcon);
         misskeyShareButton.appendChild(misskeyShareButtonTitle);
-        const words = generateNoteWord();
+        const words = await generateNoteWord();
         misskeyShareButton.onclick = () => {
             chrome.storage.sync.get(["share_target_misskey_url"], result => {
                 const misskeyUrl = result.share_target_misskey_url && result.share_target_misskey_url.length > 0 ? result.share_target_misskey_url : "https://misskey.io"
@@ -67,8 +73,8 @@ const addMisskeyShareButton = (observer) => {
     observer.observe(popupContainer, observerOptions)
 }
 const main = () => {
-    const observer = new MutationObserver(() => {
-        addMisskeyShareButton(observer)
+    const observer = new MutationObserver(async () => {
+        await addMisskeyShareButton(observer)
     });
     observer.observe(popupContainer, observerOptions);
 }
