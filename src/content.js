@@ -1,15 +1,26 @@
 "use strict";
-const observeTarget = document.getElementsByTagName("ytd-popup-container")[0];
+const observeTarget = document.getElementsByTagName("body")[0];
 const observerOptions = {
     childList: true,
     attributes: true,
     subtree: true
 };
+const getTargetUrl = (url) => {
+    switch(url.host) {
+        case "youtu.be":
+            return `https://www.youtube.com/watch?v=${url.pathname.replace(/\//, "")}`
+        case "youtube.com":
+            url.host = "www.youtube.com";
+            return url;
+        default:
+            return url;
+    }
+}
 
 const generateNoteWord = async () => {
     try {
-        const url = document.getElementById("share-url").value;
-        const targetUrl = (new URL(url)).host === "youtu.be" ? `https://www.youtube.com/watch?v=${url.split("/")[3]}` : url;
+        const url = new URL(document.getElementById("share-url").value);
+        const targetUrl = getTargetUrl(url);
         const response = await fetch(targetUrl, {
             method: 'GET',
             mode: 'same-origin',
@@ -22,7 +33,7 @@ const generateNoteWord = async () => {
         const title = targetDocument.querySelector("meta[name=title]").content;
         return {
             title,
-            url,
+            url: url.href,
         };
     } catch (error) {
         console.log(error);
