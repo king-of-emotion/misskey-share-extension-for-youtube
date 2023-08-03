@@ -1,0 +1,30 @@
+body {
+    background-color: rgb(25, 25, 25);
+    width: 400px;
+}
+#misskey-server-setting-form {
+    display: flex;   
+}
+.form-title {
+    color: white;
+    font-size: 20px;
+}
+#misskey-url {
+    width: 75%;
+    border: 2px solid #aaa;
+    border-radius: 4px;
+    margin: 8px 0;
+    outline: none;
+    padding: 8px;
+    box-sizing: border-box;
+    transition: 0.3s;
+    background-color: #3e3e3e;
+    border-color: #2e2e2e;
+    color: whitesmoke;
+}
+
+#misskey-url-submit-button {
+    width: 52px;
+    height: 40px;
+    margin: 4px 12px;
+}

@@ -2,11 +2,16 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
+  <link rel="stylesheet" href="popup.css">
 </head>
 <body>
-    <div>利用するサーバーのURL</div>
-    <input id="misskeyUrl" type="text" placeholder="https://misskey.io">
-    <button id="submitButton">設定</button>
+    <div>
+      <div class="form-title">利用するサーバーのURL</div>
+      <form id="misskey-server-setting-form">
+        <input id="misskey-url" type="text" placeholder="https://misskey.io">
+        <input type="button" id="misskey-url-submit-button" value="設定">
+      </form>
+    </div>
     <script src="popup.js" defer></script>
-</body>
+  </body>
 </html>

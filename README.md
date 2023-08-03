@@ -8,7 +8,7 @@ youtubeの視聴ページなどで共有をクリックして出てくるダイ�
 ![表示例](example.png)
 
 
-アイコンは [misskey_dev/assets](https://github.com/misskey-dev/assets )のものを取ってきています githubが調子悪いときはアイコンが表示されなくなることがあります。
+シェアボタンのアイコンは [misskey_dev/assets](https://github.com/misskey-dev/assets )のものを取ってきています githubが調子悪いときはアイコンが表示されなくなることがあります。
 
 youtubeの仕様変更などにより表示崩れや挙動がおかしくなることがあると思うのでその時は[misskeyアカウント(@king_of_emotion)](https://misskey.io/@king_of_emotion) に連絡してください。
 
@@ -22,6 +22,6 @@ misskeyはサーバーが多く存在し個人サーバーなどもあること�
 
 **デフォルトでは`misskey.io`にシェアするようになっています。**
 
-シェアはmisskeyの/shareで共有を行うようにしています
+シェアはmisskeyの/shareから行うようにしています
 
 [/shareの公式ドキュメント](https://misskey-hub.net/docs/features/share-form.html)
