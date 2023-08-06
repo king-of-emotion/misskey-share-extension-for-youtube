@@ -5,34 +5,42 @@ const observerOptions = {
     attributes: true,
     subtree: true
 };
-const getTargetUrl = (url) => {
-    switch(url.host) {
-        case "youtu.be":
-            return `https://www.youtube.com/watch?v=${url.pathname.replace(/\//, "")}`
-        case "youtube.com":
-            url.host = "www.youtube.com";
-            return url;
+const getTitleInner = (videoMetaData, url) => {
+    switch(true) {
+        case /shorts/.test(url.pathname):
+            const shortVideoMetaData = document.querySelectorAll("a.ytd-rich-grid-slim-media");
+            return Array.from(shortVideoMetaData).find(el => {
+                return (new URL(el.href)).pathname.split("/")[2]=== url.pathname.split("/")[2];
+            }).title;
+        case /live/.test(url.pathname):
+            return Array.from(videoMetaData).find(el => {
+                return (new URLSearchParams((new URL(el.href)).search)).get("v") === url.pathname.split("/")[2]
+            }).title;
         default:
-            return url;
+            return Array.from(videoMetaData).find(el => {
+                return (new URLSearchParams((new URL(el.href)).search)).get("v") === url.pathname.replace("/", "")
+            }).title;
+    }
+}
+const getTitle = (url) => {
+    if (window.location.pathname === "/watch") {
+        return document.querySelector("yt-formatted-string.ytd-watch-metadata").textContent;
+    } else if (window.location.pathname === "/") {
+        // NOTE: なぜかホームだけidがvideo-title-linkになってる 統一されたらこの分岐は不要になる
+        const videoMetaData = document.querySelectorAll("a#video-title-link");
+        return getTitleInner(videoMetaData, url);
+    } else {
+        // NOTE: 急上昇、検索ではidがvideo-title
+        const videoMetaData = document.querySelectorAll("a#video-title");
+        return getTitleInner(videoMetaData, url);
     }
 }
 
-const generateNoteWord = async () => {
+const generateNoteWord = () => {
     try {
         const url = new URL(document.getElementById("share-url").value);
-        const targetUrl = getTargetUrl(url);
-        const response = await fetch(targetUrl, {
-            method: 'GET',
-            mode: 'same-origin',
-            headers: {
-            'Content-Type': 'text/html',
-            }});
-        const string = await new Response(response.body).text();
-        const domParser = new DOMParser();
-        const targetDocument = domParser.parseFromString(string, "text/html");
-        const title = targetDocument.querySelector("meta[name=title]").content;
         return {
-            title,
+            title: getTitle(url),
             url: url.href,
         };
     } catch (error) {
@@ -41,8 +49,8 @@ const generateNoteWord = async () => {
 }
 
 const main = () => {
-    const observer = new MutationObserver(async () => {
-        await addMisskeyShareButton(observer, generateNoteWord)
+    const observer = new MutationObserver(() => {
+        addMisskeyShareButton(observer, generateNoteWord)
     });
     observer.observe(observeTarget, observerOptions);
 }
