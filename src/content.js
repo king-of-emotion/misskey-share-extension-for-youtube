@@ -29,6 +29,10 @@ const getTitle = (url) => {
         // NOTE: なぜかホームだけidがvideo-title-linkになってる 統一されたらこの分岐は不要になる
         const videoMetaData = document.querySelectorAll("a#video-title-link");
         return getTitleInner(videoMetaData, url);
+    } else if (window.location.pathname === "/playlist") {
+        // NOTE: playlist画面でのシェアは以下のようにとれば行ける
+        // なぜかyoutubeは同じidを複数の同じタグに付与しておりタグ＋idだけでは特定できない
+        return document.querySelectorAll("yt-formatted-string#text.yt-dynamic-sizing-formatted-string")[0].textContent;
     } else {
         // NOTE: 急上昇、検索ではidがvideo-title
         const videoMetaData = document.querySelectorAll("a#video-title");
@@ -41,7 +45,7 @@ const generateNoteWord = () => {
         const url = new URL(document.getElementById("share-url").value);
         return {
             title: getTitle(url),
-            url: url.href,
+            url: encodeURIComponent(url.href),
         };
     } catch (error) {
         console.log(error);
