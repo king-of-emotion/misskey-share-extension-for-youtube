@@ -23,7 +23,7 @@ const addMisskeyShareButton = async (observer, generateNoteWord) => {
         misskeyShareButton.className = "misskey-share-button";
         const misskeyIcon = document.createElement("img");
         misskeyIcon.className = "misskey-icon";
-        misskeyIcon.src = "https://raw.githubusercontent.com/misskey-dev/assets/main/icon.png";
+        misskeyIcon.src = "https://raw.githubusercontent.com/misskey-dev/assets/main/public/icon.png";
         misskeyShareButton.appendChild(misskeyIcon);
         const misskeyShareButtonTitle = document.createElement("div");
         misskeyShareButtonTitle.className = "misskey-share-button-title";
