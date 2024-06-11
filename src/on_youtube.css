@@ -18,5 +18,5 @@
 .misskey-share-button-title {
     width: 68px;
     height: 18px;
-    color: white;
+    color: var(--yt-spec-text-primary);
 }

@@ -1,6 +1,6 @@
 {
   "name": "misskey-share-button-for-youtube",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "manifest_version": 3,
   "description": "youtubeのシェアメニューにmisskeyへの共有ボタンを追加します",
   "action": {
