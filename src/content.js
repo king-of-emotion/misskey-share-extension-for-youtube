@@ -26,7 +26,7 @@ const getTitle = (url) => {
     if (window.location.pathname === "/watch") {
         return document.querySelector("yt-formatted-string.ytd-watch-metadata").textContent;
     } else if (window.location.pathname.startsWith("/shorts")){
-        return document.querySelectorAll(".ytp-title-link.yt-uix-sessionlink")[0].textContent;
+        return [...document.querySelectorAll(".ytp-title-link.yt-uix-sessionlink")].filter(v => v.href)[0].textContent;
     } else if (window.location.pathname === "/") {
         // NOTE: なぜかホームだけidがvideo-title-linkになってる 統一されたらこの分岐は不要になる
         const videoMetaData = document.querySelectorAll("a#video-title-link");
